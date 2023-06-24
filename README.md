@@ -24,7 +24,7 @@ Just some Python helper methods for GPT API, Stable Diffusion API, html, strings
 - B-TOOLS-GPT v0.24
 -
 - GPT:
-- gpt(prompt (req), model, messages, temperature, top_p, presence_penalty, frequency_penalty, user)  - OpenAI API (Paid)
+- gpt(prompt (req), model, messages, temperature, top_p, presence_penalty, frequency_penalty, user)
 - Set OPENAI_API_KEY in your env
 -
 ------------------------------------------------------------------
@@ -76,11 +76,11 @@ Just some Python helper methods for GPT API, Stable Diffusion API, html, strings
 - B-TOOLS-STRING v0.24
 -
 - String:
-- GetStringsBetween(string, opening, close)
-- GetRight(string, div)
-- GetLeft(string, div)
-- write(path, content) - Read txt from file
-- read(path) - Write txt to file
+- GetStringsBetween(string, opening, close) - returns a list of strings
+- GetRight(string, div) - returns a string
+- GetLeft(string, div) - returns a string
+- write(path, content) - Write txt to file
+- read(path) - Read txt from file
 - Wild2Reg(wildcard) - Input wildcard, Output RegEx
 - WildcardMatch() - Utility function used by Wild2Reg()
 - truncate(text, size) - Truncate to the final n characters (size = int)
