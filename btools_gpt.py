@@ -9,7 +9,7 @@
 import time
 import openai
 
-openai.api_key = "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"
+openai.api_key = os.environ["OPENAI_API_KEY"]
 
 def gpt(prompt, model="gpt-3.5-turbo", messages=None, temperature=None, top_p=None, presence_penalty=None, frequency_penalty=None, system=None):
     
