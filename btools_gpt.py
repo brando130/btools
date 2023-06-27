@@ -8,9 +8,8 @@
 
 import time
 import openai
-import os
 
-openai.api_key = os.environ["OPENAI_API_KEY"]
+openai.api_key = "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"
 
 def gpt(prompt, model="gpt-3.5-turbo", messages=None, temperature=None, top_p=None, presence_penalty=None, frequency_penalty=None, system=None):
     
@@ -49,6 +48,8 @@ def gpt(prompt, model="gpt-3.5-turbo", messages=None, temperature=None, top_p=No
     # Append the prompt to the message log
     messages.append({"role": "user", "content": prompt})
 
+    error_count = 0
+
     while True:
         try:
             # Try to connect
@@ -61,14 +62,26 @@ def gpt(prompt, model="gpt-3.5-turbo", messages=None, temperature=None, top_p=No
                 frequency_penalty=frequency_penalty
             )
 
+            print(str(response))
+
             # Parse the JSON string into a Python object    
             content = response['choices'][0]['message']['content']
             break  # If successful, exit the loop
 
         except Exception as e:
-            print("Connection failed, retrying in {} seconds...".format(delay))
-            time.sleep(delay)  # Wait for the specified delay
-            delay *= 2  # Double the delay for the next attempt
-            if delay > 600:  # If the delay exceeds 10 minutes, reset it to 10 minutes
-                delay = 600
+            if error_count > 99:
+                return None
+            else:                    
+                # If the error is caused by 4K maximum context, switch to 16K.
+                if str(e).__contains__("This model's maximum context length is"):
+                    print("Trying larger context. Error: " + str(e))
+                    model = "gpt-3.5-turbo-16k-0613"
+                    error_count = 100 # If we've raised the context size but we're still returning above the maximum, the request will never succeed. Prepare to abort.
+                else:
+                    print("Connection failed with error: " + str(e) + ", retrying in {} seconds...".format(delay))
+                    time.sleep(delay)  # Wait for the specified delay
+                    delay *= 2  # Double the delay for the next attempt
+                    error_count += 1 # Increment error count (We'll abort at 100)
+                    if delay > 600:  # If the delay exceeds 10 minutes, reset it to 10 minutes
+                        delay = 600
     return str(content)
